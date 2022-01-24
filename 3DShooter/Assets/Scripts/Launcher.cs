@@ -9,17 +9,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("ConnectedToMasterServer");
         PhotonNetwork.ConnectUsingSettings();
+        MenuManager.instance.OpenMenu("Loading");
     }
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("ConnectedToMasterServer");
         PhotonNetwork.JoinLobby();
+        MenuManager.instance.OpenMenu("Title2");
     }
  
     public override void OnJoinedLobby()
     {
         Debug.Log("Присоединились к лобби");
+
     }
 
 }
