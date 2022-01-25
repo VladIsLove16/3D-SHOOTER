@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class MenuManager : MonoBehaviour
 {
+
  public static MenuManager instance;
 
  [SerializeField] 
- private List<Menu> _menus;
+ private Menu[] menus;
   
  public void OpenMenu(string menuName)
 {
-    foreach(Menu menu in _menus)
+    foreach(Menu menu in menus)
     {
         if (menu.menuName == menuName)
         {
@@ -21,14 +23,11 @@ public class MenuManager : MonoBehaviour
             { 
                 menu.Close();
             }
-
-            
-        
     }
 }
     void Start()
-    {
-        instance = this;
+    { 
+    instance = this;
     }
 
     

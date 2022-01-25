@@ -1,28 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Photon.Pun;
-
+using TMPro;
 public class Launcher : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private TMP_InputField _roomInputField;
+    [SerializeField] private TMP_Text _errorText;
+    [SerializeField] private TMP_Text _RoomNameText;
     private void Start()
     {
-        Debug.Log("ConnectedToMasterServer");
-        PhotonNetwork.ConnectUsingSettings();
-        MenuManager.instance.OpenMenu("Loading");
+    
+        Debug.Log("Connecting To Master Server");
+       Photon.Pun.PhotonNetwork.ConnectUsingSettings();
+       MenuManager.instance.OpenMenu("loading");
     }
-
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("ConnectedToMasterServer");
-        PhotonNetwork.JoinLobby();
+    public override void OnJoinedLobby() {
+        Debug.Log("Connected To Master Server");
         MenuManager.instance.OpenMenu("Title2");
+        
     }
- 
-    public override void OnJoinedLobby()
+    public void CreateRoom()
     {
-        Debug.Log("Присоединились к лобби");
-
+        if (string.IsNullOrEmpty(_roomInputField.text))
+        {
+            return;
+        }
+        PhotonNetwork.CreateRoom(_roomInputField.text);
+        MenuManager.instance.OpenMenu("loading");
+    }
+    public override void OnJoinedRoom()
+    {
+        _RoomNameText.text=PhotonNetwork.CurrentRoom.Name;
+        MenuManager.instance.OpenMenu("Room");
+    }
+    public override void OnCreateRoomFailed(short returnCode, string message){
+        _errorText.text ="Error:"+ message;
+        MenuManager.instance.OpenMenu("Title2");
     }
 
 }
